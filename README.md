@@ -11,7 +11,7 @@ A Chrome extension that automatically generates an On Duty (OD) attendance summa
 4. Click "Load unpacked" and select the extension folder
 
 ### Chrome Web Store
-*(Coming soon...)*
+https://chromewebstore.google.com/detail/ezod/hcjjembkbilgkojhpapcffibhandgokh?utm_source=item-share-cp
 
 ## Usage
 1. Log in to [VTOP](https://vtopcc.vit.ac.in/vtop/login)
