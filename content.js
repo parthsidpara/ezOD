@@ -1,3 +1,11 @@
+const isDevMode = false; // set to false to disable logs
+
+function log(...args) {
+    if (isDevMode) {
+        console.log(...args);
+    }
+}
+
 function getDuration(dayTime) {
     if (!dayTime) return 0;
 
@@ -25,11 +33,10 @@ function getDuration(dayTime) {
     return diff;
 }
 
-
 async function checkAllCoursesForOnDuty() {
     // get all the class IDs and slot names
     const courseInfo = [];
-    document.querySelectorAll(".table tr:not(:first-child)").forEach(row => {
+    document.querySelectorAll(".table tbody tr").forEach(row => {
         const viewButton = row.querySelector("a.btn-link");
         if (viewButton) {
             const onClickAttr = viewButton.getAttribute("onclick");
@@ -45,7 +52,7 @@ async function checkAllCoursesForOnDuty() {
         }
     });
 
-    console.log(`Found ${courseInfo.length} courses to check`);
+    log(`Found ${courseInfo.length} courses to check`);
 
     const csrfToken = document.querySelector("input[name='_csrf']")?.value;
     const authorizedID = document.querySelector("input#authorizedID")?.value;
@@ -59,7 +66,7 @@ async function checkAllCoursesForOnDuty() {
 
     // check a single course
     async function checkCourse(course) {
-        console.log(`Checking course: ${course.courseCode} - ${course.courseTitle}`);
+        log(`Checking course: ${course.courseCode} - ${course.courseTitle}`);
 
         const formData = new FormData();
         formData.append("_csrf", csrfToken);
@@ -83,8 +90,8 @@ async function checkAllCoursesForOnDuty() {
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
 
-        const attendanceRows = tempDiv.querySelectorAll(".table tr:not(:first-child)");
-        console.log(`Found ${attendanceRows.length} attendance entries for ${course.courseCode}`);
+        const attendanceRows = tempDiv.querySelectorAll(".table tbody tr");
+        log(`Found ${attendanceRows.length} attendance entries for ${course.courseCode}`);
 
         attendanceRows.forEach(row => {
             const date = row.querySelector("td:nth-child(2)")?.textContent.trim();
@@ -107,7 +114,7 @@ async function checkAllCoursesForOnDuty() {
                     odCount
                 });
 
-                console.log(`Found On Duty: ${course.courseCode} on ${date} (${dayTime}) with duration ${duration} minutes, OD Count: ${odCount}`);
+                log(`Found On Duty: ${course.courseCode} on ${date} (${dayTime}) with duration ${duration} minutes, OD Count: ${odCount}`);
             }
         });
     }
@@ -120,17 +127,17 @@ async function checkAllCoursesForOnDuty() {
     }
 
     // results in console
-    console.log("=== ON DUTY ATTENDANCE SUMMARY ===");
+    log("=== ON DUTY ATTENDANCE SUMMARY ===");
     if (onDutyEntries.length === 0) {
-        console.log("No 'On Duty' entries found in any course");
+        log("No 'On Duty' entries found in any course");
     } else {
-        console.log(`Found ${onDutyEntries.length} 'On Duty' entries:`);
+        log(`Found ${onDutyEntries.length} 'On Duty' entries:`);
         onDutyEntries.forEach((entry, index) => {
-            console.log(`${index + 1}. ${entry.courseCode} - ${entry.courseTitle}`);
-            console.log(`   Date: ${entry.date}, Time: ${entry.dayTime}`);
-            console.log(`   Status: ${entry.status}`);
-            console.log(`   OD Count: ${entry.odCount}`);
-            console.log("---");
+            log(`${index + 1}. ${entry.courseCode} - ${entry.courseTitle}`);
+            log(`   Date: ${entry.date}, Time: ${entry.dayTime}`);
+            log(`   Status: ${entry.status}`);
+            log(`   OD Count: ${entry.odCount}`);
+            log("---");
         });
     }
 
